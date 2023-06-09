@@ -27,20 +27,52 @@ namespace Practice1
 
     public class Program
     {
+
         static void Main(string[] args)
         {
             Clients clients = EnterData();
-            SQLiteCommand command = new SQLiteCommand();
+            
+            
+            /// <summary>
+            /// заполнение таблицы
+            /// </summary>
             using (var connection = new SQLiteConnection("Data Source = D:\\VS\\VS projects\\WorkWithFSQLite\\Practice1\\Practice1\\DAL\\DB\\DB_for_clients.db"))
             {
-                connection.Open();               
-                
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand();
                 command.Connection = connection;
 
                 command.CommandText = $"INSERT INTO clients (name, surname, age, passport) VALUES ('{clients.name}', '{clients.surname}', {clients.age}, '{clients.passport}');";
                 int changes = command.ExecuteNonQuery();
                 Console.WriteLine($"New client are added! {changes} changes were manufactured.");
             }
+            
+            /// <summary>
+            /// запрос из базы данных
+            /// </summary>
+            string sqlExpression = "SELECT * FROM clients";
+            using (var connection2 = new SQLiteConnection("Data Source = D:\\VS\\VS projects\\WorkWithFSQLite\\Practice1\\Practice1\\DAL\\DB\\DB_for_clients.db"))
+            {
+                connection2.Open();
+                SQLiteCommand command = new SQLiteCommand(sqlExpression, connection2);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows) // если есть данные
+                    {
+                        while (reader.Read())   // построчно считываем данные
+                        {
+                            var id = reader.GetValue(1);
+                            var name = reader.GetValue(2);
+                            var age = reader.GetValue(3);
+                            var passport = reader.GetValue(4);
+
+                            Console.WriteLine($"{id} \t {name} \t {age} \t {passport}");
+                        }
+                    }
+                }
+            }
+
+
             Console.ReadKey();
         }
         static Clients EnterData()
