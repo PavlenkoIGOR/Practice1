@@ -30,9 +30,9 @@ namespace Practice1
 
         static void Main(string[] args)
         {
+            /*
             Clients clients = EnterData();
-            
-            
+                       
             /// <summary>
             /// заполнение таблицы
             /// </summary>
@@ -46,7 +46,7 @@ namespace Practice1
                 int changes = command.ExecuteNonQuery();
                 Console.WriteLine($"New client are added! {changes} changes were manufactured.");
             }
-            
+            */
             /// <summary>
             /// запрос из базы данных
             /// </summary>
@@ -61,12 +61,13 @@ namespace Practice1
                     {
                         while (reader.Read())   // построчно считываем данные
                         {
-                            var id = reader.GetValue(1);
-                            var name = reader.GetValue(2);
+                            var id = reader.GetValue(0);
+                            var name = reader.GetValue(1);
+                            var surname = reader.GetValue(2);
                             var age = reader.GetValue(3);
                             var passport = reader.GetValue(4);
 
-                            Console.WriteLine($"{id} \t {name} \t {age} \t {passport}");
+                            Console.WriteLine($"{id} \t {name} \t {surname} \t {age} \t {passport}");
                         }
                     }
                 }
